@@ -1,0 +1,24 @@
+name: artex-mcp
+
+services:
+  artex-mcp:
+    build: .
+    image: artex-mcp:0.3.0
+    container_name: artex-mcp
+    restart: unless-stopped
+    environment:
+      ARTEX_MCP_API_KEY: ${ARTEX_MCP_API_KEY}
+      ARTEX_BASE_URL: ${ARTEX_BASE_URL:-http://artex:8787}
+      ARTEX_USERNAME: ${ARTEX_USERNAME}
+      ARTEX_PASSWORD: ${ARTEX_PASSWORD}
+    ports:
+      # loopback-only on the host: reached through the SSH tunnel
+      # (artex-tunnel.service forwards localhost:8790), never exposed.
+      - "127.0.0.1:8790:8790"
+    networks:
+      - artex
+
+networks:
+  artex:
+    external: true
+    name: artex_default
